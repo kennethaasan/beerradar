@@ -12,7 +12,6 @@ export function sendSlackMessage(message: unknown) {
     attachments: [
       {
         pretext: 'Untappd Weekend Report',
-        title: 'Title',
         text: JSON.stringify(message, null, 2),
       },
     ],
