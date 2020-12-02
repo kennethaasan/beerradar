@@ -1,0 +1,15 @@
+{
+  "name": "untappd-weekend-report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Untappd Weekend Report",
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc"
+  },
+  "author": "Kenneth Aasan",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/webhook": "^5.0.3",
+    "got": "^11.8.0"
+  }
+}
