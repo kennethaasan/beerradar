@@ -4,38 +4,22 @@ import { getEnvVar } from './env';
 
 const BEERRADAR_BACKEND = getEnvVar('BEERRADAR_BACKEND');
 
+interface UntappdChecking {
+  _checkinId: number;
+  _beerId: number;
+  _userId: string;
+  user: string;
+  brewery: string;
+  beer: string;
+  userRating: number;
+  avgRating: number;
+}
+
 interface UntappdWeekendReport {
   data?: {
-    happies?: Array<{
-      _checkinId: number;
-      _beerId: number;
-      _userId: string;
-      user: string;
-      brewery: string;
-      beer: string;
-      userRating: number;
-      avgRating: number;
-    }>;
-    disappointies?: Array<{
-      _checkinId: number;
-      _beerId: number;
-      _userId: string;
-      user: string;
-      brewery: string;
-      beer: string;
-      userRating: number;
-      avgRating: number;
-    }>;
-    connoisseurs?: Array<{
-      _checkinId: number;
-      _beerId: number;
-      _userId: string;
-      user: string;
-      brewery: string;
-      beer: string;
-      userRating: number;
-      avgRating: number;
-    }>;
+    happies?: UntappdChecking[];
+    disappointies?: UntappdChecking[];
+    connoisseurs?: UntappdChecking[];
     beerLovers?: Array<{
       count: number;
       user: string;
@@ -104,7 +88,11 @@ export async function getUntappdWeekendReport(): Promise<
       fields: [
         {
           type: 'plain_text',
-          text: `${happy.user} (${happy._userId})`,
+          text: happy.user,
+        },
+        {
+          type: 'plain_text',
+          text: happy._userId,
         },
         {
           type: 'plain_text',
