@@ -1,7 +1,9 @@
-import { getEnvVar } from './env';
+import { sendSlackMessage } from './slack';
 
-const SLACK_WEBHOOK_URL = getEnvVar('SLACK_WEBHOOK_URL');
+export const handler = async () => {
+  console.log('untappd-weekend-report - sending');
 
-export const handler = () => {
-  console.log('untappd-weekend-report', SLACK_WEBHOOK_URL);
+  await sendSlackMessage();
+
+  console.log('untappd-weekend-report - sent');
 };
