@@ -1,3 +1,4 @@
+import { KnownBlock } from '@slack/types';
 import { IncomingWebhook } from '@slack/webhook';
 import { getEnvVar } from './env';
 
@@ -7,12 +8,12 @@ const webhook = new IncomingWebhook(SLACK_WEBHOOK_URL, {
   icon_emoji: ':beerradar:',
 });
 
-export function sendSlackMessage(message: unknown) {
+export function sendSlackMessage(args: { blocks: KnownBlock[] }) {
   return webhook.send({
     attachments: [
       {
         pretext: 'Untappd Weekend Report',
-        text: JSON.stringify(message, null, 2),
+        blocks: args.blocks,
       },
     ],
   });
