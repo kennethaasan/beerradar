@@ -61,6 +61,61 @@ async function getUntappdWeekendReportData() {
   return data.body;
 }
 
+function generateUntappdCheckinsSlackBlocks(args: {
+  header: string;
+  checkins: UntappdChecking[];
+}) {
+  const blocks: KnownBlock[] = [
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: args.header,
+        },
+      ],
+    },
+  ];
+
+  args.checkins.forEach((checkin) => {
+    const block: KnownBlock = {
+      type: 'section',
+      fields: [
+        {
+          type: 'plain_text',
+          text: checkin.user,
+        },
+        {
+          type: 'plain_text',
+          text: checkin._userId,
+        },
+        {
+          type: 'plain_text',
+          text: `Beer: ${checkin.beer}`,
+        },
+        {
+          type: 'plain_text',
+          text: `Brewery: ${checkin.brewery}`,
+        },
+        {
+          type: 'plain_text',
+          text: `Rating: ${checkin.userRating}`,
+        },
+        {
+          type: 'plain_text',
+          text: `Average Rating: ${checkin.avgRating}`,
+        },
+      ],
+    };
+    blocks.push(block);
+    blocks.push({
+      type: 'divider',
+    });
+  });
+
+  return blocks;
+}
+
 export async function getUntappdWeekendReport(): Promise<
   KnownBlock[] | undefined
 > {
@@ -72,54 +127,49 @@ export async function getUntappdWeekendReport(): Promise<
 
   console.log('generating Slack blocks');
 
-  const blocks: KnownBlock[] = [
+  const blocks: KnownBlock[] = [];
+
+  if (data.data.happies?.length) {
+    blocks.push(
+      ...generateUntappdCheckinsSlackBlocks({
+        header: ':happycarsten: *Happies* :happycarsten:',
+        checkins: data.data.happies,
+      })
+    );
+  }
+
+  if (data.data.disappointies?.length) {
+    blocks.push(
+      ...generateUntappdCheckinsSlackBlocks({
+        header: ':sad_cat: *Disappointies* :sad_cat:',
+        checkins: data.data.disappointies,
+      })
+    );
+  }
+
+  if (data.data.connoisseurs?.length) {
+    blocks.push(
+      ...generateUntappdCheckinsSlackBlocks({
+        header: ':thinking_face: *Connoisseurs* :thinking_face:',
+        checkins: data.data.connoisseurs,
+      })
+    );
+  }
+
+  console.log('Slack blocks generated');
+
+  if (!blocks.length) {
+    return undefined;
+  }
+
+  return [
     {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: 'Happies',
+        text: 'Untappd Weekend Report',
       },
     },
+    ...blocks,
   ];
-
-  data.data.happies?.map((happy) => {
-    const block: KnownBlock = {
-      type: 'section',
-      fields: [
-        {
-          type: 'plain_text',
-          text: happy.user,
-        },
-        {
-          type: 'plain_text',
-          text: happy._userId,
-        },
-        {
-          type: 'plain_text',
-          text: `Beer: ${happy.beer}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Brewery: ${happy.brewery}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Rating: ${happy.userRating}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Average Rating: ${happy.avgRating}`,
-        },
-      ],
-    };
-
-    blocks.push(block);
-    blocks.push({
-      type: 'divider',
-    });
-  });
-
-  console.log('Slack blocks generated');
-
-  return blocks;
 }

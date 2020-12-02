@@ -4,6 +4,7 @@
   "private": true,
   "description": "Untappd Weekend Report",
   "scripts": {
+    "start": "npm run build && node -e 'require(\"./build/index\").handler()'",
     "build": "../../node_modules/.bin/tsc"
   },
   "author": "Kenneth Aasan",

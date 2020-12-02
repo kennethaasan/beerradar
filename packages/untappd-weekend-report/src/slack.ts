@@ -10,11 +10,6 @@ const webhook = new IncomingWebhook(SLACK_WEBHOOK_URL, {
 
 export function sendSlackMessage(args: { blocks: KnownBlock[] }) {
   return webhook.send({
-    attachments: [
-      {
-        pretext: 'Untappd Weekend Report',
-        blocks: args.blocks,
-      },
-    ],
+    ...args,
   });
 }

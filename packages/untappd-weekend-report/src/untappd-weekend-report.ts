@@ -2,18 +2,22 @@ import { getUntappdWeekendReport } from './data';
 import { sendSlackMessage } from './slack';
 
 export const handler = async () => {
-  console.log('untappd-weekend-report - creating');
+  try {
+    console.log('untappd-weekend-report - creating');
 
-  const blocks = await getUntappdWeekendReport();
+    const blocks = await getUntappdWeekendReport();
 
-  if (!blocks?.length) {
-    console.log('untappd-weekend-report - no data');
-    return;
+    if (!blocks?.length) {
+      console.log('untappd-weekend-report - no data');
+      return;
+    }
+
+    await sendSlackMessage({
+      blocks,
+    });
+
+    console.log('untappd-weekend-report - sent');
+  } catch (err) {
+    console.error(err);
   }
-
-  await sendSlackMessage({
-    blocks,
-  });
-
-  console.log('untappd-weekend-report - sent');
 };
