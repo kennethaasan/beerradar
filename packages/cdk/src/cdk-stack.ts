@@ -18,6 +18,7 @@ export class BeerRadarStack extends cdk.Stack {
       environment: {
         NODE_ENV: 'production',
         SLACK_WEBHOOK_URL: getEnvVar('SLACK_WEBHOOK_URL'),
+        BEERRADAR_BACKEND: getEnvVar('BEERRADAR_BACKEND'),
       },
     });
   }

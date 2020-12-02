@@ -7,12 +7,13 @@ const webhook = new IncomingWebhook(SLACK_WEBHOOK_URL, {
   icon_emoji: ':beerradar:',
 });
 
-export function sendSlackMessage() {
+export function sendSlackMessage(message: unknown) {
   return webhook.send({
     attachments: [
       {
         pretext: 'Untappd Weekend Report',
-        title: 'Untappd Weekend Report',
+        title: 'Title',
+        text: JSON.stringify(message, null, 2),
       },
     ],
   });
