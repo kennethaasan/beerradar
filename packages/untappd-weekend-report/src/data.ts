@@ -116,6 +116,53 @@ function generateUntappdCheckinsSlackBlocks(args: {
   return blocks;
 }
 
+function generateUntappdRankingsSlackBlocks(args: {
+  header: string;
+  rankings: Array<{
+    name: string;
+    count: number;
+    averageRating: number;
+  }>;
+}) {
+  const blocks: KnownBlock[] = [
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: args.header,
+        },
+      ],
+    },
+  ];
+
+  args.rankings.forEach((ranking) => {
+    const block: KnownBlock = {
+      type: 'section',
+      fields: [
+        {
+          type: 'plain_text',
+          text: ranking.name,
+        },
+        {
+          type: 'plain_text',
+          text: `Count: ${ranking.count}`,
+        },
+        {
+          type: 'plain_text',
+          text: `Average Rating: ${ranking.averageRating}`,
+        },
+      ],
+    };
+    blocks.push(block);
+    blocks.push({
+      type: 'divider',
+    });
+  });
+
+  return blocks;
+}
+
 export async function getUntappdWeekendReport(): Promise<
   KnownBlock[] | undefined
 > {
@@ -152,6 +199,45 @@ export async function getUntappdWeekendReport(): Promise<
       ...generateUntappdCheckinsSlackBlocks({
         header: ':thinking_face: *Connoisseurs* :thinking_face:',
         checkins: data.data.connoisseurs,
+      })
+    );
+  }
+
+  if (data.data.beerLovers?.length) {
+    blocks.push(
+      ...generateUntappdRankingsSlackBlocks({
+        header: ':beers: *Beer Lovers* :beers:',
+        rankings: data.data.beerLovers.map((beerLover) => ({
+          name: beerLover.user,
+          count: beerLover.count,
+          averageRating: beerLover.avgUserRating,
+        })),
+      })
+    );
+  }
+
+  if (data.data.popularBreweries?.length) {
+    blocks.push(
+      ...generateUntappdRankingsSlackBlocks({
+        header: ':monkey_brew: *Popular Breweries* :monkey_brew:',
+        rankings: data.data.popularBreweries.map((popularBrewery) => ({
+          name: popularBrewery.brewery,
+          count: popularBrewery.count,
+          averageRating: popularBrewery.avgUserRating,
+        })),
+      })
+    );
+  }
+
+  if (data.data.popularBeers?.length) {
+    blocks.push(
+      ...generateUntappdRankingsSlackBlocks({
+        header: ':beer: *Popular Beers* :beer:',
+        rankings: data.data.popularBeers.map((popularBeer) => ({
+          name: popularBeer.brewery,
+          count: popularBeer.count,
+          averageRating: popularBeer.avgUserRating,
+        })),
       })
     );
   }
