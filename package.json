@@ -1,0 +1,39 @@
+{
+  "name": "beerradar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BeerRadar Software",
+  "scripts": {
+    "lerna": "lerna",
+    "postinstall": "lerna bootstrap",
+    "start": "lerna run start --stream --parallel",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "pretest": "npm run prettier:check && npm run eslint",
+    "prettier:check": "prettier --check \"**/*.{json,ts,tsx,md,mdx,css,html,yml,yaml,scss}\"",
+    "prettier:fix": "prettier --write \"**/*.{json,ts,tsx,md,mdx,css,html,yml,yaml,scss}\"",
+    "eslint": "eslint . --ext ts,tsx --max-warnings=0",
+    "deploy": "lerna run cdk:deploy",
+    "synth": "lerna run cdk:synth"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennethaasan/beerradar.git"
+  },
+  "author": "Kenneth Aasan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kennethaasan/beerradar/issues"
+  },
+  "homepage": "https://github.com/kennethaasan/beerradar#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "lerna": "^3.22.1",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.2"
+  }
+}
