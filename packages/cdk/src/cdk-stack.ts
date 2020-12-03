@@ -26,7 +26,7 @@ export class BeerRadarStack extends cdk.Stack {
 
     // Run every Monday at 6 AM UTC
     // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
-    const rule = new events.Rule(this, 'Rule', {
+    const rule = new events.Rule(this, 'untappd-weekend-report-rule', {
       schedule: events.Schedule.expression('cron(0 6 ? * MON *)'),
     });
 
