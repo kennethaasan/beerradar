@@ -106,6 +106,15 @@ function generateUntappdCheckinsSlackBlocks(args: {
           text: `Average Rating: ${checkin.avgRating}`,
         },
       ],
+      accessory: {
+        type: 'button',
+        text: {
+          type: 'plain_text',
+          text: ':untappd:',
+          emoji: true,
+        },
+        url: `https://untappd.com/c/${checkin._checkinId}`,
+      },
     };
     blocks.push(block);
     blocks.push({
