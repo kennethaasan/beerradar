@@ -86,7 +86,7 @@ function generateUntappdCheckinsSlackBlocks(args: {
           type: 'mrkdwn',
           text: `*${checkin.user}* - ${checkin.userRating} (${formatNumber(
             checkin.avgRating
-          )} avg)\n${checkin.brewery} - *${checkin.beer}*`,
+          )} avg)\n*${checkin.beer}* (${checkin.brewery})`,
         },
       ],
       accessory: {
