@@ -1,15 +1,17 @@
 import { KnownBlock } from '@slack/types';
-import { IncomingWebhook } from '@slack/webhook';
+import { WebClient } from '@slack/web-api';
 import { getEnvVar } from './env';
 
-const SLACK_WEBHOOK_URL = getEnvVar('SLACK_WEBHOOK_URL');
+const SLACK_TOKEN = getEnvVar('SLACK_TOKEN');
+const SLACK_CHANNEL = getEnvVar('SLACK_CHANNEL');
 
-const webhook = new IncomingWebhook(SLACK_WEBHOOK_URL, {
-  icon_emoji: ':beerradar:',
-});
+const slackClient = new WebClient(SLACK_TOKEN);
 
 export function sendSlackMessage(args: { blocks: KnownBlock[] }) {
-  return webhook.send({
-    ...args,
+  return slackClient.chat.postMessage({
+    channel: SLACK_CHANNEL,
+    icon_emoji: ':beerradar:',
+    text: '',
+    blocks: args.blocks,
   });
 }

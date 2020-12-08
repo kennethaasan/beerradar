@@ -19,7 +19,8 @@ export class BeerRadarStack extends cdk.Stack {
       memorySize: 128,
       environment: {
         NODE_ENV: 'production',
-        SLACK_WEBHOOK_URL: getEnvVar('SLACK_WEBHOOK_URL'),
+        SLACK_TOKEN: getEnvVar('SLACK_TOKEN'),
+        SLACK_CHANNEL: getEnvVar('SLACK_CHANNEL'),
         BEERRADAR_BACKEND: getEnvVar('BEERRADAR_BACKEND'),
       },
     });

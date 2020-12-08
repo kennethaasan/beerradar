@@ -1,6 +1,7 @@
 import { KnownBlock } from '@slack/types';
 import got from 'got';
 import { getEnvVar } from './env';
+import { formatNumber } from './numbers';
 
 const BEERRADAR_BACKEND = getEnvVar('BEERRADAR_BACKEND');
 
@@ -82,28 +83,10 @@ function generateUntappdCheckinsSlackBlocks(args: {
       type: 'section',
       fields: [
         {
-          type: 'plain_text',
-          text: checkin.user,
-        },
-        {
-          type: 'plain_text',
-          text: checkin._userId,
-        },
-        {
-          type: 'plain_text',
-          text: `Beer: ${checkin.beer}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Brewery: ${checkin.brewery}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Rating: ${checkin.userRating}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Average Rating: ${checkin.avgRating}`,
+          type: 'mrkdwn',
+          text: `*${checkin.user}* - ${checkin.userRating} (${formatNumber(
+            checkin.avgRating
+          )} avg)\n${checkin.brewery} - *${checkin.beer}*`,
         },
       ],
       accessory: {
@@ -117,9 +100,10 @@ function generateUntappdCheckinsSlackBlocks(args: {
       },
     };
     blocks.push(block);
-    blocks.push({
-      type: 'divider',
-    });
+  });
+
+  blocks.push({
+    type: 'divider',
   });
 
   return blocks;
@@ -130,7 +114,6 @@ function generateUntappdRankingsSlackBlocks(args: {
   rankings: Array<{
     name: string;
     count: number;
-    averageRating: number;
   }>;
 }) {
   const blocks: KnownBlock[] = [
@@ -150,23 +133,16 @@ function generateUntappdRankingsSlackBlocks(args: {
       type: 'section',
       fields: [
         {
-          type: 'plain_text',
-          text: ranking.name,
-        },
-        {
-          type: 'plain_text',
-          text: `Count: ${ranking.count}`,
-        },
-        {
-          type: 'plain_text',
-          text: `Average Rating: ${ranking.averageRating}`,
+          type: 'mrkdwn',
+          text: `${ranking.count} - ${ranking.name}`,
         },
       ],
     };
     blocks.push(block);
-    blocks.push({
-      type: 'divider',
-    });
+  });
+
+  blocks.push({
+    type: 'divider',
   });
 
   return blocks;
@@ -217,9 +193,10 @@ export async function getUntappdWeekendReport(): Promise<
       ...generateUntappdRankingsSlackBlocks({
         header: ':beers: *Beer Lovers* :beers:',
         rankings: data.data.beerLovers.map((beerLover) => ({
-          name: beerLover.user,
+          name: `*${beerLover.user}* (${formatNumber(
+            beerLover.avgUserRating
+          )} avg)`,
           count: beerLover.count,
-          averageRating: beerLover.avgUserRating,
         })),
       })
     );
@@ -230,9 +207,10 @@ export async function getUntappdWeekendReport(): Promise<
       ...generateUntappdRankingsSlackBlocks({
         header: ':monkey_brew: *Popular Breweries* :monkey_brew:',
         rankings: data.data.popularBreweries.map((popularBrewery) => ({
-          name: popularBrewery.brewery,
+          name: `*${popularBrewery.brewery}* (${formatNumber(
+            popularBrewery.avgUserRating
+          )} avg)`,
           count: popularBrewery.count,
-          averageRating: popularBrewery.avgUserRating,
         })),
       })
     );
@@ -243,9 +221,10 @@ export async function getUntappdWeekendReport(): Promise<
       ...generateUntappdRankingsSlackBlocks({
         header: ':beer: *Popular Beers* :beer:',
         rankings: data.data.popularBeers.map((popularBeer) => ({
-          name: popularBeer.brewery,
+          name: `*${popularBeer.beer}* (${formatNumber(
+            popularBeer.avgUserRating
+          )} avg)\n${popularBeer.brewery}`,
           count: popularBeer.count,
-          averageRating: popularBeer.avgUserRating,
         })),
       })
     );

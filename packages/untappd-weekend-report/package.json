@@ -10,7 +10,7 @@
   "author": "Kenneth Aasan",
   "license": "MIT",
   "dependencies": {
-    "@slack/webhook": "^5.0.3",
+    "@slack/web-api": "^5.14.0",
     "got": "^11.8.0"
   }
 }
