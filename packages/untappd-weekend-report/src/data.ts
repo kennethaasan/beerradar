@@ -84,9 +84,11 @@ function generateUntappdCheckinsSlackBlocks(args: {
       fields: [
         {
           type: 'mrkdwn',
-          text: `*${checkin.user}* - ${checkin.userRating} (${formatNumber(
-            checkin.avgRating
-          )} avg)\n*${checkin.beer}* (${checkin.brewery})`,
+          text: `*${checkin.user}* - ${formatNumber(
+            checkin.userRating
+          )} (${formatNumber(checkin.avgRating)} avg)\n*${checkin.beer}* (${
+            checkin.brewery
+          })`,
         },
       ],
       accessory: {
@@ -195,7 +197,7 @@ export async function getUntappdWeekendReport(): Promise<
         rankings: data.data.beerLovers.map((beerLover) => ({
           name: `*${beerLover.user}* (${formatNumber(
             beerLover.avgUserRating
-          )} avg)`,
+          )} user avg)`,
           count: beerLover.count,
         })),
       })
@@ -209,7 +211,7 @@ export async function getUntappdWeekendReport(): Promise<
         rankings: data.data.popularBreweries.map((popularBrewery) => ({
           name: `*${popularBrewery.brewery}* (${formatNumber(
             popularBrewery.avgUserRating
-          )} avg)`,
+          )} user avg)`,
           count: popularBrewery.count,
         })),
       })
@@ -223,7 +225,7 @@ export async function getUntappdWeekendReport(): Promise<
         rankings: data.data.popularBeers.map((popularBeer) => ({
           name: `*${popularBeer.beer}* (${formatNumber(
             popularBeer.avgUserRating
-          )} avg)\n${popularBeer.brewery}`,
+          )} user avg)\n${popularBeer.brewery}`,
           count: popularBeer.count,
         })),
       })
