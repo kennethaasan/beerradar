@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "@slack/web-api": "^5.14.0",
-    "got": "^11.8.0"
+    "got": "^11.8.5"
   }
 }
